@@ -19,16 +19,18 @@ const Index = () => {
         <meta name="description" content="Official website of Prayagraj Municipal Corporation. Access civic services, file complaints, and get AI assistance for all your municipal needs." />
       </Helmet>
       
-      <Navbar />
-      <Breadcrumbs />
-      <Hero />
-      <QuickLinks />
-      <ServicesSection />
-      <ComplaintOverview />
-      <AIFeatures />
-      <FAQSection />
-      <Footer />
-      <AIChatbot />
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <Navbar />
+        <Breadcrumbs />
+        <Hero />
+        <QuickLinks />
+        <ServicesSection />
+        <ComplaintOverview />
+        <AIFeatures />
+        <FAQSection />
+        <Footer />
+        <AIChatbot />
+      </div>
     </>
   );
 };
