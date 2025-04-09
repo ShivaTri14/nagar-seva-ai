@@ -10,6 +10,7 @@ import AIFeatures from "@/components/AIFeatures";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
+import FloatingThemeToggle from "@/components/FloatingThemeToggle";
 
 const Index = () => {
   return (
@@ -29,6 +30,7 @@ const Index = () => {
         <AIFeatures />
         <FAQSection />
         <Footer />
+        <FloatingThemeToggle />
         <AIChatbot />
       </div>
     </>

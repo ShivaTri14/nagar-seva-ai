@@ -1,8 +1,26 @@
 
 import { Link } from "react-router-dom";
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const { toast } = useToast();
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      toast({
+        title: "Subscribed!",
+        description: "You've successfully subscribed to our newsletter.",
+        variant: "default",
+      });
+      setEmail("");
+    }
+  };
+
   return (
     <footer className="bg-municipal-dark text-white">
       <div className="container mx-auto px-4 py-12">
@@ -90,18 +108,22 @@ const Footer = () => {
             <p className="text-gray-300 mb-2">
               Subscribe to our newsletter for updates and announcements.
             </p>
-            <form className="mt-4">
+            <form className="mt-4" onSubmit={handleSubscribe}>
               <div className="flex">
                 <input 
                   type="email" 
                   placeholder="Your email address" 
                   className="bg-municipal-dark/50 text-white border border-gray-600 px-3 py-2 rounded-l-md flex-1 focus:outline-none focus:border-municipal-accent"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
-                <button 
+                <Button 
+                  type="submit"
                   className="bg-municipal-accent text-white px-4 py-2 rounded-r-md hover:bg-municipal-accent/90 transition-colors"
                 >
                   Subscribe
-                </button>
+                </Button>
               </div>
             </form>
           </div>

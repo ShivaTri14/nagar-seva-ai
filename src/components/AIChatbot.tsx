@@ -155,7 +155,7 @@ const AIChatbot = () => {
 
   return (
     <>
-      {/* Chat button with pulse animation */}
+      {/* Chat button with pulse animation - positioned lower to avoid theme toggle */}
       <button
         onClick={toggleChat}
         className={cn(
@@ -172,7 +172,7 @@ const AIChatbot = () => {
       {/* Chat window */}
       <div
         className={cn(
-          "fixed bottom-24 right-6 w-80 sm:w-96 bg-white rounded-lg shadow-xl z-40 overflow-hidden transition-all duration-300 ease-in-out",
+          "fixed bottom-24 right-6 w-80 sm:w-96 bg-background border border-border rounded-lg shadow-xl z-40 overflow-hidden transition-all duration-300 ease-in-out",
           isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12 pointer-events-none"
         )}
       >
@@ -190,7 +190,7 @@ const AIChatbot = () => {
         </div>
 
         {/* Chat messages */}
-        <div className="h-96 overflow-y-auto p-4 bg-gray-50">
+        <div className="h-96 overflow-y-auto p-4 bg-accent/10">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -236,13 +236,13 @@ const AIChatbot = () => {
         </div>
 
         {/* Chat input */}
-        <div className="p-3 border-t">
+        <div className="p-3 border-t border-border">
           <form onSubmit={handleSubmit} className="flex items-center">
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="text-gray-500 hover:text-municipal-primary"
+              className="text-muted-foreground hover:text-municipal-primary"
               onClick={handleImageAttach}
             >
               {isImageAttached ? (
@@ -255,13 +255,13 @@ const AIChatbot = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 mx-2 border-gray-200 focus-visible:ring-municipal-primary"
+              className="flex-1 mx-2 border-border focus-visible:ring-municipal-primary"
             />
             <Button type="submit" size="icon" className="bg-municipal-primary hover:bg-municipal-primary/90">
               <Send size={18} />
             </Button>
           </form>
-          <div className="text-xs text-gray-500 mt-2 px-2">
+          <div className="text-xs text-muted-foreground mt-2 px-2">
             Ask about garbage collection, water issues, road maintenance, or upload an image of an issue
           </div>
         </div>
