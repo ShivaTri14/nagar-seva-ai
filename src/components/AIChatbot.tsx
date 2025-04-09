@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +28,7 @@ const AIChatbot = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isImageAttached, setIsImageAttached] = useState(false);
   const { toast } = useToast();
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   // Sample responses for demo purposes
   const sampleResponses: Record<string, string> = {
@@ -44,6 +44,21 @@ const AIChatbot = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    // After 30 seconds, if user hasn't interacted with chatbot, show a notification
+    if (!hasInteracted && !isOpen) {
+      const timer = setTimeout(() => {
+        toast({
+          title: "Need assistance?",
+          description: "Our AI assistant can help you with municipal queries!",
+          duration: 5000,
+        });
+      }, 30000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [hasInteracted, isOpen, toast]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -133,14 +148,22 @@ const AIChatbot = () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const toggleChat = () => {
+    setIsOpen(!isOpen);
+    setHasInteracted(true);
+  };
+
   return (
     <>
-      {/* Chat button */}
+      {/* Chat button with pulse animation */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleChat}
         className={cn(
           "fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-lg transition-all duration-300",
-          isOpen ? "bg-municipal-dark text-white rotate-90" : "bg-municipal-primary text-white"
+          isOpen ? 
+            "bg-municipal-dark text-white rotate-90" : 
+            "bg-municipal-primary text-white",
+          !isOpen && !hasInteracted && "animate-pulse-soft"
         )}
       >
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}

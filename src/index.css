@@ -35,6 +35,36 @@
 
     --radius: 0.5rem;
   }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 201 49% 28%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 159 73% 36%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 39 91% 53%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 212 40% 80%;
+  }
   
   * {
     @apply border-border;
@@ -64,10 +94,10 @@
   }
   
   .section-heading {
-    @apply text-2xl md:text-3xl font-bold text-municipal-dark mb-4;
+    @apply text-2xl md:text-3xl font-bold text-municipal-dark dark:text-white mb-4;
   }
   
   .section-subheading {
-    @apply text-lg text-municipal-primary/90 mb-6;
+    @apply text-lg text-municipal-primary/90 dark:text-municipal-primary/80 mb-6;
   }
 }

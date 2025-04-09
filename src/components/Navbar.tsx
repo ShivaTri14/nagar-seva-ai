@@ -3,9 +3,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, Menu, Search, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   
   const navLinks = [
     { name: "Home", path: "/" },
@@ -45,13 +48,36 @@ const Navbar = () => {
           </nav>
           
           {/* Actions */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-municipal-dark">
-              <Search size={20} />
-            </Button>
+          <div className="hidden md:flex items-center space-x-2">
+            {isSearchOpen ? (
+              <div className="relative flex items-center">
+                <Input 
+                  placeholder="Search services, forms..." 
+                  className="pl-8 w-64 border-municipal-primary/30 focus:border-municipal-primary"
+                  autoFocus
+                />
+                <Search size={18} className="absolute left-2 text-municipal-primary/60" />
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="absolute right-0 text-municipal-primary" 
+                  onClick={() => setIsSearchOpen(false)}
+                >
+                  <X size={18} />
+                </Button>
+              </div>
+            ) : (
+              <Button variant="ghost" size="icon" className="text-municipal-dark" onClick={() => setIsSearchOpen(true)}>
+                <Search size={20} />
+              </Button>
+            )}
+            
+            <LanguageSwitcher />
+            
             <Button variant="ghost" size="icon" className="text-municipal-dark">
               <Bell size={20} />
             </Button>
+            
             <Button className="bg-municipal-primary hover:bg-municipal-primary/90" size="sm">
               <User size={16} className="mr-2" />
               Login
@@ -73,6 +99,23 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t py-4 px-4 animate-fade-in">
+          <div className="flex items-center mb-4">
+            <Input 
+              placeholder="Search services, forms..." 
+              className="flex-1 border-municipal-primary/30"
+            />
+            <Button variant="ghost" size="icon" className="text-municipal-primary ml-2">
+              <Search size={20} />
+            </Button>
+          </div>
+          
+          <div className="flex justify-between items-center mb-3">
+            <LanguageSwitcher />
+            <Button variant="ghost" size="icon" className="text-municipal-dark">
+              <Bell size={20} />
+            </Button>
+          </div>
+          
           <nav className="flex flex-col space-y-4">
             {navLinks.map((link) => (
               <Link 
@@ -85,16 +128,11 @@ const Navbar = () => {
               </Link>
             ))}
           </nav>
-          <div className="mt-4 flex space-x-4">
-            <Button className="bg-municipal-primary hover:bg-municipal-primary/90 flex-1">
+          
+          <div className="mt-4">
+            <Button className="bg-municipal-primary hover:bg-municipal-primary/90 w-full">
               <User size={16} className="mr-2" />
               Login
-            </Button>
-            <Button variant="outline" size="icon" className="text-municipal-dark">
-              <Search size={20} />
-            </Button>
-            <Button variant="outline" size="icon" className="text-municipal-dark">
-              <Bell size={20} />
             </Button>
           </div>
         </div>
