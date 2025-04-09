@@ -38,8 +38,8 @@ const Hero = () => {
               <div className="absolute -inset-1 bg-municipal-primary/20 rounded-lg blur"></div>
               <div className="bg-white p-1 rounded-lg relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1602537686094-9bcc29205e0e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80" 
-                  alt="Prayagraj City" 
+                  src="https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace" 
+                  alt="Prayagraj Municipal Corporation Building" 
                   className="rounded-lg object-cover h-[400px] w-[500px]"
                 />
               </div>
