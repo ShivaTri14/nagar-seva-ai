@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -93,7 +93,15 @@ const Footer = () => {
               </div>
               <div className="flex items-center">
                 <Phone size={18} className="mr-2 flex-shrink-0" />
-                <p className="text-gray-300">+91 532 2567890</p>
+                <p className="text-gray-300">
+                  <span className="font-medium">General:</span> +91 532 2567890
+                </p>
+              </div>
+              <div className="flex items-center">
+                <Phone size={18} className="mr-2 flex-shrink-0" />
+                <p className="text-gray-300">
+                  <span className="font-medium">24/7 Helpline:</span> 0532-2463774
+                </p>
               </div>
               <div className="flex items-center">
                 <Mail size={18} className="mr-2 flex-shrink-0" />
