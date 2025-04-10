@@ -1,13 +1,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { ComplaintDetails, ChatLanguage } from "@/types/chatbot";
 import ChatButton from "./chatbot/ChatButton";
 import ChatHeader from "./chatbot/ChatHeader";
 import ChatMessages from "./chatbot/ChatMessages";
 import QuickActions from "./chatbot/QuickActions";
 import ChatInput from "./chatbot/ChatInput";
+import WasteTips from "./chatbot/WasteTips";
 import ImagePreviewDialog from "./chatbot/ImagePreviewDialog";
 import ComplaintDrawer from "./chatbot/ComplaintDrawer";
 import { useChatbotConversation } from "@/hooks/useChatbotConversation";
@@ -23,6 +24,7 @@ const AIChatbot = () => {
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [showWasteTips, setShowWasteTips] = useState(true);
 
   const {
     messages,
@@ -48,7 +50,7 @@ const AIChatbot = () => {
       const timer = setTimeout(() => {
         toast({
           title: "Need assistance?",
-          description: "Our AI assistant can help you with municipal queries!",
+          description: "Our AI assistant can help with municipal queries and waste identification!",
           duration: 5000,
         });
       }, 30000);
@@ -57,18 +59,54 @@ const AIChatbot = () => {
     }
   }, [hasInteracted, isOpen, toast]);
 
+  // Hide waste tips when user starts typing or when there are messages
+  useEffect(() => {
+    if (input.length > 0 || messages.length > 1) {
+      setShowWasteTips(false);
+    } else {
+      setShowWasteTips(true);
+    }
+  }, [input, messages]);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      
+      // Check if file is an image
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload an image file (.jpg, .png, etc.)",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please upload an image smaller than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       const reader = new FileReader();
       
       reader.onload = (event) => {
         if (event.target?.result) {
           setImagePreview(event.target.result as string);
           setIsImageAttached(true);
+          
+          // Set a default input text for waste identification if input is empty
+          if (!input.trim()) {
+            setInput("Please identify this waste and tell me how to dispose of it properly");
+          }
+          
           toast({
             title: "Image Attached",
-            description: "Your image has been attached to the chat.",
+            description: "Your image has been attached. Send to analyze waste type.",
             variant: "default",
           });
         }
@@ -99,7 +137,7 @@ const AIChatbot = () => {
     // In a real implementation, this would access the device camera
     toast({
       title: "Camera Access",
-      description: "Camera functionality would open here to capture issue.",
+      description: "Camera functionality would open here to capture waste for analysis.",
       variant: "default",
     });
   };
@@ -144,6 +182,10 @@ const AIChatbot = () => {
           isTyping={isTyping}
           setIsImageDialogOpen={setIsImageDialogOpen}
         />
+
+        {showWasteTips && (
+          <WasteTips language={currentLanguage as ChatLanguage} />
+        )}
 
         <QuickActions 
           setInput={setInput} 
