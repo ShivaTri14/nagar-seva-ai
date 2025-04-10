@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 // Sample responses for demo purposes
 export const sampleResponses: Record<string, string> = {
   garbage: "I've logged your garbage collection complaint. Expect resolution within 24 hours. Your tracking ID is #GC-2023-",
@@ -27,31 +29,31 @@ export const serviceCategories = [
   { 
     id: "water", 
     name: "Water Services", 
-    icon: <span className="text-blue-500">💧</span>,
+    icon: () => React.createElement("span", { className: "text-blue-500" }, "💧"),
     description: "Report water issues, check supply status, request new connection"
   },
   { 
     id: "waste", 
     name: "Waste Management", 
-    icon: <span className="text-green-500">♻️</span>,
+    icon: () => React.createElement("span", { className: "text-green-500" }, "♻️"),
     description: "Schedule pickup, report dumping, recycling information"
   },
   { 
     id: "tax", 
     name: "Property Tax", 
-    icon: <span className="text-amber-500">🏦</span>,
+    icon: () => React.createElement("span", { className: "text-amber-500" }, "🏦"),
     description: "Calculate tax, payment options, verification of records"
   },
   { 
     id: "roads", 
     name: "Road Maintenance", 
-    icon: <span className="text-gray-500">🛣️</span>,
+    icon: () => React.createElement("span", { className: "text-gray-500" }, "🛣️"),
     description: "Report potholes, request repairs, traffic management"
   },
   { 
     id: "permits", 
     name: "Building Permits", 
-    icon: <span className="text-purple-500">🏗️</span>,
+    icon: () => React.createElement("span", { className: "text-purple-500" }, "🏗️"),
     description: "Apply for permits, check status, submit documents"
   }
 ];
@@ -63,4 +65,3 @@ export const formatTime = (date: Date) => {
 export const generateRandomTrackingId = () => {
   return Math.floor(Math.random() * 10000);
 };
-

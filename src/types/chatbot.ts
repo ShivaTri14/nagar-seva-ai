@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 export type Message = {
   id: number;
   text: string;
@@ -12,7 +14,7 @@ export type Message = {
 export type ServiceCategory = {
   id: string;
   name: string;
-  icon: React.ReactNode;
+  icon: () => React.ReactNode;
   description: string;
 };
 
@@ -23,4 +25,3 @@ export type ComplaintDetails = {
 };
 
 export type ChatLanguage = "english" | "hindi";
-

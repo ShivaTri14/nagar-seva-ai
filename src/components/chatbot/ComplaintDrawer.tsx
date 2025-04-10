@@ -59,7 +59,7 @@ const ComplaintDrawer: React.FC<ComplaintDrawerProps> = ({
                   )}
                   onClick={() => setComplaintDetails(prev => ({...prev, type: category.id}))}
                 >
-                  <div className="text-2xl mb-1">{category.icon}</div>
+                  <div className="text-2xl mb-1">{category.icon()}</div>
                   <div>{category.name}</div>
                 </button>
               ))}
