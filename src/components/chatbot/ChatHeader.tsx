@@ -8,7 +8,7 @@ interface ChatHeaderProps {
   currentLanguage: ChatLanguage;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ switchLanguage }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ switchLanguage, currentLanguage }) => {
   return (
     <div className="bg-municipal-primary text-white p-4">
       <div className="flex items-center">
@@ -21,10 +21,13 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ switchLanguage }) => {
         </div>
         <button 
           onClick={switchLanguage} 
-          className="p-1.5 rounded-full hover:bg-municipal-primary/80"
+          className="p-2 rounded-full hover:bg-white/20 transition-colors flex items-center justify-center"
           aria-label="Switch language"
         >
-          <Languages size={18} />
+          <Languages size={20} className="text-white" />
+          <span className="ml-2 text-xs hidden md:inline">
+            {currentLanguage === 'english' ? 'हिंदी' : 'English'}
+          </span>
         </button>
       </div>
     </div>

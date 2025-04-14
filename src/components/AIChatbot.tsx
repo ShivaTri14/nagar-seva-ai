@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -45,7 +44,6 @@ const AIChatbot = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // After 30 seconds, if user hasn't interacted with chatbot, show a notification
     if (!hasInteracted && !isOpen) {
       const timer = setTimeout(() => {
         toast({
@@ -59,7 +57,6 @@ const AIChatbot = () => {
     }
   }, [hasInteracted, isOpen, toast]);
 
-  // Hide waste tips when user starts typing or when there are messages
   useEffect(() => {
     if (input.length > 0 || messages.length > 1) {
       setShowWasteTips(false);
@@ -72,7 +69,6 @@ const AIChatbot = () => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       
-      // Check if file is an image
       if (!file.type.startsWith('image/')) {
         toast({
           title: "Invalid file type",
@@ -82,7 +78,6 @@ const AIChatbot = () => {
         return;
       }
       
-      // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast({
           title: "File too large",
@@ -99,7 +94,6 @@ const AIChatbot = () => {
           setImagePreview(event.target.result as string);
           setIsImageAttached(true);
           
-          // Set a default input text for waste identification if input is empty
           if (!input.trim()) {
             setInput("Please identify this waste and tell me how to dispose of it properly");
           }
@@ -127,14 +121,12 @@ const AIChatbot = () => {
     setInput(complaintText);
     setIsComplaintDrawerOpen(false);
     
-    // Add slight delay to let drawer close
     setTimeout(() => {
       handleSubmit({ preventDefault: () => {} } as React.FormEvent);
     }, 300);
   };
 
   const handleCameraCapture = () => {
-    // In a real implementation, this would access the device camera
     toast({
       title: "Camera Access",
       description: "Camera functionality would open here to capture waste for analysis.",
@@ -155,7 +147,6 @@ const AIChatbot = () => {
         toggleChat={toggleChat} 
       />
 
-      {/* Hidden file input for image upload */}
       <input 
         type="file"
         ref={fileInputRef}
@@ -165,11 +156,9 @@ const AIChatbot = () => {
         aria-label="Upload image"
       />
 
-      {/* Chat window */}
       <div
         className={cn(
           "fixed bottom-24 right-6 w-80 sm:w-96 bg-background border border-border rounded-lg shadow-xl z-40 overflow-hidden transition-all duration-300 ease-in-out",
-          // Reduced height from h-96 to h-80
           isOpen ? "opacity-100 translate-y-0 h-[26rem]" : "opacity-0 translate-y-12 pointer-events-none h-0"
         )}
       >
@@ -182,7 +171,6 @@ const AIChatbot = () => {
           messages={messages} 
           isTyping={isTyping}
           setIsImageDialogOpen={setIsImageDialogOpen}
-          // Adjusted the height to be slightly smaller
           className="h-[16rem] overflow-y-auto"
         />
 
