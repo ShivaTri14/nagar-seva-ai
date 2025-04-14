@@ -169,7 +169,8 @@ const AIChatbot = () => {
       <div
         className={cn(
           "fixed bottom-24 right-6 w-80 sm:w-96 bg-background border border-border rounded-lg shadow-xl z-40 overflow-hidden transition-all duration-300 ease-in-out",
-          isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12 pointer-events-none"
+          // Reduced height from h-96 to h-80
+          isOpen ? "opacity-100 translate-y-0 h-[26rem]" : "opacity-0 translate-y-12 pointer-events-none h-0"
         )}
       >
         <ChatHeader 
@@ -181,6 +182,8 @@ const AIChatbot = () => {
           messages={messages} 
           isTyping={isTyping}
           setIsImageDialogOpen={setIsImageDialogOpen}
+          // Adjusted the height to be slightly smaller
+          className="h-[16rem] overflow-y-auto"
         />
 
         {showWasteTips && (

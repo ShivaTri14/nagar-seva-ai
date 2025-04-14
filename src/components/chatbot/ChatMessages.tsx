@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { formatTime } from '@/utils/chatbotUtils';
@@ -10,12 +9,14 @@ interface ChatMessagesProps {
   messages: Message[];
   isTyping: boolean;
   setIsImageDialogOpen: (open: boolean) => void;
+  className?: string;  // Added optional className prop
 }
 
 const ChatMessages: React.FC<ChatMessagesProps> = ({ 
   messages, 
   isTyping, 
-  setIsImageDialogOpen
+  setIsImageDialogOpen,
+  className  // Destructure className
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -94,7 +95,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   };
 
   return (
-    <div className="h-96 overflow-y-auto p-4 bg-accent/10">
+    <div className={cn("p-4 bg-accent/10", className)}>
       {messages.map((message) => (
         <div
           key={message.id}
