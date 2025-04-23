@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
@@ -241,9 +242,13 @@ export const useChatbotConversation = () => {
       return;
     }
 
+    // Fix: Define lowerInput variable
+    const lowerInput = input.toLowerCase();
+
     if (isImageAttached && !lowerInput.includes("waste") && !lowerInput.includes("garbage") && 
         !lowerInput.includes("recycle")) {
-      response = currentLanguage === "english"
+      // Fix: Define response variable
+      let response = currentLanguage === "english"
         ? "Thank you for the image. I can see this is an issue that needs attention. I've logged this complaint with high priority. Expect resolution within 24 hours. Your tracking ID is #MC-2023-" + generateRandomTrackingId()
         : "छवि के लिए धन्यवाद। मैं देख सकता हूँ कि यह एक ऐसी समस्या है जिस पर ध्यान देने की आवश्यकता है। मैंने इस शिकायत को उच्च प्राथमिकता के साथ दर्ज किया है। 24 घंटे के भीतर समाधान की उम्मीद करें। आपका ट्रैकिंग आईडी है #MC-2023-" + generateRandomTrackingId();
       
@@ -254,11 +259,32 @@ export const useChatbotConversation = () => {
         description: currentLanguage === "english" ? "Issue identified and logged" : "समस्या पहचानी और दर्ज की गई",
         variant: "default",
       });
+      
+      // Also need to show the response to the user
+      setTimeout(() => {
+        const botMessage: Message = {
+          id: messages.length + 2,
+          text: response,
+          sender: "bot",
+          timestamp: new Date(),
+        };
+        
+        setMessages((prev) => [...prev, botMessage]);
+        setIsTyping(false);
+        setGeneratingResponse(false);
+        
+        if (user) {
+          saveConversationToDatabase(input, response);
+        }
+      }, 1500);
+      
+      return;
     }
 
     setTimeout(() => {
       let response = "I'm sorry, I don't have information about that. Please contact our helpdesk for assistance.";
       
+      // Fix: Define lowerInput again to make sure it's available in this scope
       const lowerInput = input.toLowerCase();
       const currentResponses = currentLanguage === "english" ? sampleResponses : hindiTranslations;
       
