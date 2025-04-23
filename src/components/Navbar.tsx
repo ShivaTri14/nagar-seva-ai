@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bell, Menu, Search, User, X, LogOut } from "lucide-react";
@@ -18,7 +17,6 @@ const Navbar = () => {
   
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Services", path: "/services" },
     { name: "Complaints", path: "/complaints" },
     { name: "Track Status", path: "/track" },
     { name: "About", path: "/about" },
