@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export type Message = {
@@ -9,7 +8,7 @@ export type Message = {
   status?: "success" | "pending" | "error";
   attachmentType?: "image";
   attachmentUrl?: string;
-  wasteAnalysis?: WasteAnalysisResult;
+  wasteAnalysis?: WasteAnalysis;
 };
 
 export type ServiceCategory = {
@@ -34,6 +33,13 @@ export type WasteCategory =
   | "solid" 
   | "liquid"
   | "unknown";
+
+export type WasteAnalysis = {
+  binType: 'green' | 'blue' | 'unknown';
+  wasteType: 'decomposable' | 'non-decomposable' | 'unknown';
+  detectedIssue: string;
+  confidence?: number;
+};
 
 export type WasteAnalysisResult = {
   category: WasteCategory;

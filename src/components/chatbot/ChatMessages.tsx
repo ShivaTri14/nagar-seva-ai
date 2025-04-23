@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import { CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { formatTime } from '@/utils/chatbotUtils';
@@ -9,14 +10,14 @@ interface ChatMessagesProps {
   messages: Message[];
   isTyping: boolean;
   setIsImageDialogOpen: (open: boolean) => void;
-  className?: string;  // Added optional className prop
+  className?: string;
 }
 
 const ChatMessages: React.FC<ChatMessagesProps> = ({ 
   messages, 
   isTyping, 
   setIsImageDialogOpen,
-  className  // Destructure className
+  className
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -24,14 +25,10 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Helper function to get appropriate color for waste category
-  const getWasteCategoryColor = (category: WasteCategory): string => {
-    switch (category) {
-      case "organic": return "bg-green-100 text-green-800 border-green-300";
-      case "recyclable": return "bg-blue-100 text-blue-800 border-blue-300";
-      case "hazardous": return "bg-red-100 text-red-800 border-red-300";
-      case "solid": return "bg-gray-100 text-gray-800 border-gray-300";
-      case "liquid": return "bg-purple-100 text-purple-800 border-purple-300";
+  const getBinTypeColor = (binType: string): string => {
+    switch (binType) {
+      case "green": return "bg-green-100 text-green-800 border-green-300";
+      case "blue": return "bg-blue-100 text-blue-800 border-blue-300";
       default: return "bg-gray-100 text-gray-800 border-gray-300";
     }
   };
@@ -124,17 +121,26 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
               </div>
             )}
             {message.wasteAnalysis && (
-              <div className="mt-2">
+              <div className="mt-2 space-y-2">
                 <Badge 
                   variant="outline" 
                   className={cn(
                     "font-medium flex items-center px-2 py-0.5 text-xs", 
-                    getWasteCategoryColor(message.wasteAnalysis.category)
+                    getBinTypeColor(message.wasteAnalysis.binType)
                   )}
                 >
-                  {getWasteCategoryIcon(message.wasteAnalysis.category)}
-                  {message.wasteAnalysis.category} waste - {Math.round(message.wasteAnalysis.confidence * 100)}% confidence
+                  {message.wasteAnalysis.binType === "green" ? (
+                    <Info size={14} className="mr-1" />
+                  ) : (
+                    <AlertCircle size={14} className="mr-1" />
+                  )}
+                  {message.wasteAnalysis.binType} bin - {message.wasteAnalysis.wasteType}
                 </Badge>
+                {message.wasteAnalysis.detectedIssue && (
+                  <p className="text-xs text-muted-foreground">
+                    Detected Issue: {message.wasteAnalysis.detectedIssue}
+                  </p>
+                )}
               </div>
             )}
             {message.status && (
