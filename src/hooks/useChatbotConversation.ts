@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
@@ -7,7 +6,8 @@ import { Message, ChatLanguage, WasteAnalysisResult, WasteAnalysis } from '@/typ
 import { 
   sampleResponses, 
   hindiTranslations, 
-  generateRandomTrackingId 
+  generateRandomTrackingId,
+  transformWasteAnalysisResult 
 } from '@/utils/chatbotUtils';
 import { 
   analyzeWasteImage, 
@@ -105,6 +105,58 @@ export const useChatbotConversation = () => {
       confidence: result.confidence
     };
   };
+
+const generateApplicationFormat = (location: string, issue: string, language: string) => {
+  if (language === "hindi") {
+    return `
+सेवा में,
+नगर आयुक्त,
+प्रयागराज नगर निगम
+प्रयागराज
+
+विषय: ${location} में ${issue} की शिकायत
+
+महोदय/महोदया,
+
+मैं ______________________ (नाम),
+निवासी ______________________ (पूरा पता),
+मोबाइल नंबर: ______________________,
+ईमेल: ______________________,
+
+आपके ध्यान में यह बात लाना चाहता/चाहती हूं कि उपरोक्त स्थान पर एक गंभीर समस्या है। कृपया इस मामले में तत्काल कार्रवाई करें।
+
+धन्यवाद
+
+दिनांक: ________________            हस्ताक्षर: ________________
+
+आप अपनी शिकायत यहां भी दर्ज कर सकते हैं: https://allahabadmc.gov.in/CitizenHome.html
+    `;
+  }
+
+  return `
+To,
+The Municipal Commissioner,
+Prayagraj Municipal Corporation
+Prayagraj
+
+Subject: Complaint regarding ${issue} at ${location}
+
+Respected Sir/Madam,
+
+I, ______________________ (Name),
+residing at ______________________ (Full Address),
+Mobile No.: ______________________,
+Email: ______________________,
+
+wish to bring to your kind notice that there is a serious issue at the above-mentioned location. Kindly take immediate action on this matter.
+
+Thank you for your prompt attention.
+
+Date: ________________            Signature: ________________
+
+You can also file your complaint at: https://allahabadmc.gov.in/CitizenHome.html
+  `;
+};
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -284,11 +336,19 @@ export const useChatbotConversation = () => {
     setTimeout(() => {
       let response = "I'm sorry, I don't have information about that. Please contact our helpdesk for assistance.";
       
-      // Fix: Define lowerInput again to make sure it's available in this scope
       const lowerInput = input.toLowerCase();
       const currentResponses = currentLanguage === "english" ? sampleResponses : hindiTranslations;
       
-      if (lowerInput.includes("organic waste") || lowerInput.includes("food waste") || 
+      // If there's a location and image attached, generate application format
+      if (isImageAttached && imagePreview) {
+        const applicationFormat = generateApplicationFormat(
+          "the specified location", // You can enhance this by storing actual location
+          "the reported issue",
+          currentLanguage
+        );
+        
+        response = applicationFormat;
+      } else if (lowerInput.includes("organic waste") || lowerInput.includes("food waste") || 
           lowerInput.includes("compost")) {
         response = currentLanguage === "english" 
           ? "Organic waste should be placed in green bins. It can be composted to create nutrient-rich soil. The municipality collects organic waste on Mondays and Thursdays."
@@ -301,7 +361,7 @@ export const useChatbotConversation = () => {
                 lowerInput.includes("chemical") || lowerInput.includes("electronic")) {
         response = currentLanguage === "english" 
           ? "Hazardous waste requires special handling. Never mix with regular trash. Take items like batteries, electronics, and chemicals to the designated collection center at Environmental Complex, Civil Lines, open on the first Saturday of each month."
-          : "खतरनाक कचरे के लिए विशेष हैंडलिंग की आवश्यकता होती है। कभी भी नियमित कचरे के साथ न मिलाएं। बैटरी, इलेक्ट्रॉनिक्स और रसायन जैसी वस्तुओं को पर्यावरण कॉम्प्लेक्स, सिविल लाइंस में नामित संग्रह केंद्र पर ले जाएं, जो हर महीने के पहले शनिवार को ��ुला रहता है।";
+          : "खतरनाक कचरे के लिए विशेष हैंडलिंग की आवश्यकता होती है। कभी भी नियमित कचरे के साथ न मिलाएं। बैटरी, इलेक्ट्रॉनिक्स और रसायन जैसी वस्तुओं को पर्यावरण कॉम्प्लेक्स, सिविल लाइंस में नामित संग्रह केंद्र पर ले जाएं, जो हर महीने के पहले शनिवार को ुला रहता है।";
       } else {
         for (const [keyword, reply] of Object.entries(currentResponses)) {
           if (lowerInput.includes(keyword)) {
