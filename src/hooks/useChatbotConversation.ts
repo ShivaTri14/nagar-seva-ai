@@ -106,57 +106,57 @@ export const useChatbotConversation = () => {
     };
   };
 
-const generateApplicationFormat = (location: string, issue: string, language: string) => {
-  if (language === "hindi") {
+  const generateApplicationFormat = (location: string, issue: string, language: string) => {
+    if (language === "hindi") {
+      return `
+      सेवा में,
+      नगर आयुक्त,
+      प्रयागराज नगर निगम
+      प्रयागराज
+
+      विषय: ${location} में ${issue} की शिकायत
+
+      महोदय/महोदया,
+
+      मैं ______________________ (नाम),
+      निवासी ______________________ (पूरा पता),
+      मोबाइल नंबर: ______________________,
+      ईमेल: ______________________,
+
+      आपके ध्यान में यह बात लाना चाहता/चाहती हूं कि उपरोक्त स्थान पर एक गंभीर समस्या है। कृपया इस मामले में तत्काल कार्रवाई करें।
+
+      धन्यवाद
+
+      दिनांक: ________________            हस्ताक्षर: ________________
+
+      आप अपनी शिकायत यहां भी दर्ज कर सकते हैं: https://allahabadmc.gov.in/CitizenHome.html
+      `;
+    }
+
     return `
-सेवा में,
-नगर आयुक्त,
-प्रयागराज नगर निगम
-प्रयागराज
+    To,
+    The Municipal Commissioner,
+    Prayagraj Municipal Corporation
+    Prayagraj
 
-विषय: ${location} में ${issue} की शिकायत
+    Subject: Complaint regarding ${issue} at ${location}
 
-महोदय/महोदया,
+    Respected Sir/Madam,
 
-मैं ______________________ (नाम),
-निवासी ______________________ (पूरा पता),
-मोबाइल नंबर: ______________________,
-ईमेल: ______________________,
+    I, ______________________ (Name),
+    residing at ______________________ (Full Address),
+    Mobile No.: ______________________,
+    Email: ______________________,
 
-आपके ध्यान में यह बात लाना चाहता/चाहती हूं कि उपरोक्त स्थान पर एक गंभीर समस्या है। कृपया इस मामले में तत्काल कार्रवाई करें।
+    wish to bring to your kind notice that there is a serious issue at the above-mentioned location. Kindly take immediate action on this matter.
 
-धन्यवाद
+    Thank you for your prompt attention.
 
-दिनांक: ________________            हस्ताक्षर: ________________
+    Date: ________________            Signature: ________________
 
-आप अपनी शिकायत यहां भी दर्ज कर सकते हैं: https://allahabadmc.gov.in/CitizenHome.html
+    You can also file your complaint at: https://allahabadmc.gov.in/CitizenHome.html
     `;
-  }
-
-  return `
-To,
-The Municipal Commissioner,
-Prayagraj Municipal Corporation
-Prayagraj
-
-Subject: Complaint regarding ${issue} at ${location}
-
-Respected Sir/Madam,
-
-I, ______________________ (Name),
-residing at ______________________ (Full Address),
-Mobile No.: ______________________,
-Email: ______________________,
-
-wish to bring to your kind notice that there is a serious issue at the above-mentioned location. Kindly take immediate action on this matter.
-
-Thank you for your prompt attention.
-
-Date: ________________            Signature: ________________
-
-You can also file your complaint at: https://allahabadmc.gov.in/CitizenHome.html
-  `;
-};
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -294,12 +294,10 @@ You can also file your complaint at: https://allahabadmc.gov.in/CitizenHome.html
       return;
     }
 
-    // Fix: Define lowerInput variable
     const lowerInput = input.toLowerCase();
 
     if (isImageAttached && !lowerInput.includes("waste") && !lowerInput.includes("garbage") && 
         !lowerInput.includes("recycle")) {
-      // Fix: Define response variable
       let response = currentLanguage === "english"
         ? "Thank you for the image. I can see this is an issue that needs attention. I've logged this complaint with high priority. Expect resolution within 24 hours. Your tracking ID is #MC-2023-" + generateRandomTrackingId()
         : "छवि के लिए धन्यवाद। मैं देख सकता हूँ कि यह एक ऐसी समस्या है जिस पर ध्यान देने की आवश्यकता है। मैंने इस शिकायत को उच्च प्राथमिकता के साथ दर्ज किया है। 24 घंटे के भीतर समाधान की उम्मीद करें। आपका ट्रैकिंग आईडी है #MC-2023-" + generateRandomTrackingId();
@@ -312,7 +310,6 @@ You can also file your complaint at: https://allahabadmc.gov.in/CitizenHome.html
         variant: "default",
       });
       
-      // Also need to show the response to the user
       setTimeout(() => {
         const botMessage: Message = {
           id: messages.length + 2,
@@ -339,10 +336,9 @@ You can also file your complaint at: https://allahabadmc.gov.in/CitizenHome.html
       const lowerInput = input.toLowerCase();
       const currentResponses = currentLanguage === "english" ? sampleResponses : hindiTranslations;
       
-      // If there's a location and image attached, generate application format
       if (isImageAttached && imagePreview) {
         const applicationFormat = generateApplicationFormat(
-          "the specified location", // You can enhance this by storing actual location
+          "the specified location",
           "the reported issue",
           currentLanguage
         );
@@ -361,7 +357,7 @@ You can also file your complaint at: https://allahabadmc.gov.in/CitizenHome.html
                 lowerInput.includes("chemical") || lowerInput.includes("electronic")) {
         response = currentLanguage === "english" 
           ? "Hazardous waste requires special handling. Never mix with regular trash. Take items like batteries, electronics, and chemicals to the designated collection center at Environmental Complex, Civil Lines, open on the first Saturday of each month."
-          : "खतरनाक कचरे के लिए विशेष हैंडलिंग की आवश्यकता होती है। कभी भी नियमित कचरे के साथ न मिलाएं। बैटरी, इलेक्ट्रॉनिक्स और रसायन जैसी वस्तुओं को पर्यावरण कॉम्प्लेक्स, सिविल लाइंस में नामित संग्रह केंद्र पर ले जाएं, जो हर महीने के पहले शनिवार को ुला रहता है।";
+          : "खतरनाक ��चरे के लिए विशेष हैंडलिंग की आवश्यकता होती है। कभी भी नियमित कचरे के साथ न मिलाएं। बैटरी, इलेक्ट्रॉनिक्स और रसायन जैसी वस्तुओं को पर्यावरण कॉम्प्लेक्स, सिविल लाइंस में नामित संग्रह केंद्र पर ले जाएं, जो हर महीने के पहले शनिवार को ुला रहता है।";
       } else {
         for (const [keyword, reply] of Object.entries(currentResponses)) {
           if (lowerInput.includes(keyword)) {

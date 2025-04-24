@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { WasteAnalysisResult, WasteAnalysis } from '@/types/chatbot';
 
 // Sample responses for demo purposes
 export const sampleResponses: Record<string, string> = {
@@ -64,4 +65,38 @@ export const formatTime = (date: Date) => {
 
 export const generateRandomTrackingId = () => {
   return Math.floor(Math.random() * 10000);
+};
+
+export const transformWasteAnalysisResult = (result: WasteAnalysisResult): WasteAnalysis => {
+  let binType: 'green' | 'blue' | 'unknown' = 'unknown';
+  if (result.category === 'organic') {
+    binType = 'green';
+  } else if (result.category === 'recyclable') {
+    binType = 'blue';
+  }
+  
+  let wasteType: 'decomposable' | 'non-decomposable' | 'unknown' = 'unknown';
+  if (result.category === 'organic') {
+    wasteType = 'decomposable';
+  } else if (result.category === 'recyclable' || result.category === 'solid') {
+    wasteType = 'non-decomposable';
+  }
+  
+  let detectedIssue = '';
+  if (result.subTypes && result.subTypes.length > 0) {
+    detectedIssue = `Detected ${result.subTypes.join(', ')}`;
+  } else {
+    detectedIssue = `Detected ${result.category} waste`;
+  }
+  
+  if (result.confidence) {
+    detectedIssue += ` (${Math.round(result.confidence * 100)}% confidence)`;
+  }
+  
+  return {
+    binType,
+    wasteType,
+    detectedIssue,
+    confidence: result.confidence
+  };
 };
